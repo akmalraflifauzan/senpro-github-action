@@ -40,20 +40,20 @@ deploy:
         port: ${{ secrets.PORT }}
         script: |
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/<KEY_NAME_FROM_TA>>
+          ssh-add ~/.ssh/ssh-praktikan87
           echo "Check project folder";
-          [ -d "${HOME}/senpro/<NIM>/module02/senpro-github-action/" ] && {
+          [ -d "${HOME}/senpro/533033/module02/senpro-github-action/" ] && {
             echo "Repository has not been cloned. Cloning...";
-            mkdir -p ~/senpro/<NIM>/module02;
-            cd ~/senpro/<NIM>/module02;
-            git clone <<FORK_REPOSITORY_LINK>>;
-            cd ~/senpro/<NIM>/module02/senpro-github-action;
+            mkdir -p ~/senpro/533033/module02;
+            cd ~/senpro/533033/module02;
+            git clone https://github.com/akmalraflifauzan/senpro-github-action.git;
+            cd ~/senpro/533033/module02/senpro-github-action;
             echo "Install Packages and Build Project";
             npm install;
             npm run build;
           } || {
             echo "Repository already exists. Building...";
-            cd ~/senpro/<NIM>/module02/senpro-github-action;
+            cd ~/senpro/533033/module02/senpro-github-action;
             git restore .;
             git pull origin main;
             echo "Install Packages and Build Project";
