@@ -13,51 +13,11 @@ jobs:
         node-version: [16.x]
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Testing with Pre-Deploy
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - run: npm i
       - run: npm run build
-
-deploy:
-  needs: test-build
-  runs-on: ubuntu-latest
-
-  strategy:
-    matrix:
-      node-version: [16.x]
-
-  steps:
-    - name: Build app on VM
-      uses: appleboy/ssh-action@master
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        password: ${{ secrets.PASSWORD }}
-        port: ${{ secrets.PORT }}
-        script: |
-          eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/<KEY_NAME_FROM_TA>>
-          echo "Check project folder";
-          [ -d "${HOME}/senpro/<NIM>/module02/senpro-github-action/" ] && {
-            echo "Repository has not been cloned. Cloning...";
-            mkdir -p ~/senpro/<NIM>/module02;
-            cd ~/senpro/<NIM>/module02;
-            git clone <<FORK_REPOSITORY_LINK>>;
-            cd ~/senpro/<NIM>/module02/senpro-github-action;
-            echo "Install Packages and Build Project";
-            npm install;
-            npm run build;
-          } || {
-            echo "Repository already exists. Building...";
-            cd ~/senpro/<NIM>/module02/senpro-github-action;
-            git restore .;
-            git pull origin main;
-            echo "Install Packages and Build Project";
-            npm install;
-            npm run build;
-          }
-
